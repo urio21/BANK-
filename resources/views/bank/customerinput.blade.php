@@ -44,7 +44,8 @@
     </nav>
   </div>
   <div class="custom-container">
-    <form action="{{ route('validation') }}" method="GET" class="custom-form">
+    <form action="{{ route('meter_validation') }}" method="POST" class="custom-form">
+      @csrf
       <div>
         Fill in the following details to buy a token.
       </div>
@@ -66,10 +67,11 @@
       <div class="form-group">
         <label for="utilityProvider" class="required-field">Utility Provider</label>
         <select class="form-control" id="utilityProvider" name="utilityProvider" required>
-          <option value="dawasco">Dawasco</option>
-          <option value="tanesco">Tanesco</option>
-          <option value="oryxgas">Oryx Gas</option>
+          @foreach($utility_providers as $provider)
+            <option value="{{ $provider['provider_name'] }}">{{ ucfirst($provider['provider_name']) }}</option>
+          @endforeach
         </select>
+        {{-- {!! Form::select('utility_provider_id', collect($utility_providers)->pluck('provider_name', 'id'), null, array('class' => 'form-control', 'id'=>'utilityProviderSelect')) !!} --}}
         <span class="required-text">required</span>
       </div>
       <button type="submit" class="btn btn-primary btn-block" id="sendButton">Send</button>
