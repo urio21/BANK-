@@ -77,7 +77,7 @@
   </div>
 
   <!-- JavaScript to show "required" text on Send button click -->
-  <script>
+  {{-- <script>
     document.addEventListener("DOMContentLoaded", function () {
       const sendButton = document.getElementById("sendButton");
       const requiredTexts = document.querySelectorAll(".required-text");
@@ -86,8 +86,38 @@
         requiredTexts.forEach(function (text) {
           text.style.display = "inline"; // Display "required" text
         });
-      }); 
+      });
+    });
+  </script> --}}
+
+  <!-- JavaScript to show "required" text only for empty input fields -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const sendButton = document.getElementById("sendButton");
+      const requiredTexts = document.querySelectorAll(".required-text");
+
+      sendButton.addEventListener("click", function () {
+        // Loop through each required input field and check if it's empty
+        requiredTexts.forEach(function (text) {
+          const inputField = text.previousElementSibling; // Get the input field before the "required" text
+          if (inputField.value.trim() === "") {
+            text.style.display = "inline"; // Display "required" text for empty fields
+          } else {
+            text.style.display = "none"; // Hide "required" text for filled fields
+          }
+        });
+      });
+
+      // Listen for input events on the input fields to hide "required" text when the user starts typing
+      const inputFields = document.querySelectorAll(".form-control");
+      inputFields.forEach(function (inputField) {
+        inputField.addEventListener("input", function () {
+          const requiredText = inputField.nextElementSibling; // Get the "required" text after the input field
+          requiredText.style.display = "none"; // Hide "required" text when the user starts typing
+        });
+      });
     });
   </script>
+
 </body>
 </html>
