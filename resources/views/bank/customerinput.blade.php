@@ -1,50 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bank Validation System</title>
-  <!-- Include Bootstrap CSS and JavaScript -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <!-- Include your custom CSS styles -->
-  <style>
-    /* Custom CSS to center the form and set max-width */
-    .custom-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 80vh;
-    }
 
-    .custom-form {
-      max-width: 500px; /* Adjust the maximum width as needed */
-      width: 100%;
-      padding: 10px;
-    }
+@extends('bank.layouts.app')
 
-    /* Style for required fields */
-    .required-field::after {
-      content: " *";
-      color: red;
-    }
+@section('content')
 
-    /* Style for the "required" text */
-    .required-text {
-      color: red;
-      display: none; /* Initially hide the "required" text */
-    }
-  </style>
-</head>
-<body>
-  <div id="app">
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-      <div class="container">
-        Bank Validation System
-      </div>
-    </nav>
-  </div>
   <div class="custom-container">
-    <form action="{{ route('meter_validation') }}" method="POST" class="custom-form">
+    <form action="{{ route('meter_validation') }}" method="post" class="custom-form">
       @csrf
       <div>
         Fill in the following details to buy a token.
@@ -59,19 +19,18 @@
         <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter amount" required pattern="^\d+(\.\d+)?$">
         <span class="required-text">required</span>
       </div>
-      <div class="form-group">
+      {{-- <div class="form-group">
         <label for="phoneNumber" class="required-field">Phone Number</label>
         <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" required pattern="0[67]\d{8}">
         <span class="required-text">required</span>
-      </div>
+      </div> --}}
       <div class="form-group">
         <label for="utilityProvider" class="required-field">Utility Provider</label>
         <select class="form-control" id="utilityProvider" name="utilityProvider" required>
           @foreach($utility_providers as $provider)
-            <option value="{{ $provider['provider_name'] }}">{{ ucfirst($provider['provider_name']) }}</option>
+            <option value="{{ $provider['id'] }}">{{ ucfirst($provider['provider_name']) }}</option>
           @endforeach
         </select>
-        {{-- {!! Form::select('utility_provider_id', collect($utility_providers)->pluck('provider_name', 'id'), null, array('class' => 'form-control', 'id'=>'utilityProviderSelect')) !!} --}}
         <span class="required-text">required</span>
       </div>
       <button type="submit" class="btn btn-primary btn-block" id="sendButton">Send</button>
@@ -79,7 +38,7 @@
   </div>
 
   <!-- JavaScript to show "required" text on Send button click -->
-  {{-- <script>
+  <script>
     document.addEventListener("DOMContentLoaded", function () {
       const sendButton = document.getElementById("sendButton");
       const requiredTexts = document.querySelectorAll(".required-text");
@@ -90,36 +49,34 @@
         });
       });
     });
-  </script> --}}
-
-  <!-- JavaScript to show "required" text only for empty input fields -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const sendButton = document.getElementById("sendButton");
-      const requiredTexts = document.querySelectorAll(".required-text");
-
-      sendButton.addEventListener("click", function () {
-        // Loop through each required input field and check if it's empty
-        requiredTexts.forEach(function (text) {
-          const inputField = text.previousElementSibling; // Get the input field before the "required" text
-          if (inputField.value.trim() === "") {
-            text.style.display = "inline"; // Display "required" text for empty fields
-          } else {
-            text.style.display = "none"; // Hide "required" text for filled fields
-          }
-        });
-      });
-
-      // Listen for input events on the input fields to hide "required" text when the user starts typing
-      const inputFields = document.querySelectorAll(".form-control");
-      inputFields.forEach(function (inputField) {
-        inputField.addEventListener("input", function () {
-          const requiredText = inputField.nextElementSibling; // Get the "required" text after the input field
-          requiredText.style.display = "none"; // Hide "required" text when the user starts typing
-        });
-      });
-    });
   </script>
 
-</body>
-</html>
+  <!-- JavaScript to show "required" text only for empty input fields -->
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const sendButton = document.getElementById("sendButton");
+        const requiredTexts = document.querySelectorAll(".required-text");
+
+        // sendButton.addEventListener("click", function () {
+        //   // Loop through each required input field and check if it's empty
+        //   requiredTexts.forEach(function (text) {
+        //     const inputField = text.previousElementSibling; // Get the input field before the "required" text
+        //     if (inputField.value.trim() === "") {
+        //       text.style.display = "inline"; // Display "required" text for empty fields
+        //     } else {
+        //       text.style.display = "none"; // Hide "required" text for filled fields
+        //     }
+        //   });
+        // });
+
+        // Listen for input events on the input fields to hide "required" text when the user starts typing
+        const inputFields = document.querySelectorAll(".form-control");
+        inputFields.forEach(function (inputField) {
+          inputField.addEventListener("input", function () {
+            const requiredText = inputField.nextElementSibling; // Get the "required" text after the input field
+            requiredText.style.display = "none"; // Hide "required" text when the user starts typing
+          });
+        });
+      });
+    </script>
+@endsection

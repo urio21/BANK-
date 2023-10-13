@@ -14,13 +14,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', [MeterValidationController::class, 'index']);
+Route::get('/', function () {
+    return view('bank.home');
+})->name('home');
 
-Route::post('/meter_validation', [MeterValidationController::class, 'validateMeterInformation'])->name('meter_validation');
+Route::get('customer_payment', [MeterValidationController::class, 'index'])->name('customer_payment');
 
-Route::get('/display', function () {
-        return view('bank.validation');
-    })->name('validation');
-Route::get('/notification', function () {
-    return view('bank.notification');
-})->name('notification');
+Route::post('meter_validation', [MeterValidationController::class, 'validateMeterInformation'])->name('meter_validation');
+
+Route::post('generate_token', [MeterValidationController::class, 'confirmGenerateToken'])->name('generate_token');
+
+Route::get('notifications', [MeterValidationController::class, 'getNotifications'])->name('notifications');
+
