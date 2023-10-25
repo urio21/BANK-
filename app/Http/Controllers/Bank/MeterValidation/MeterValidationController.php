@@ -32,14 +32,12 @@ class MeterValidationController extends Controller
         $this->validate($request, [
             'meterNumber' => 'required',
             'amount' => 'required',
-            // 'phoneNumber' => 'required',
             'utilityProvider' => 'required'
         ]);
 
         $inputs = [
             'meter_num' => $request->input('meterNumber'),
             'amount' => $request->input('amount'),
-            // 'phoneNumber' => $request->input('phoneNumber'),
             'utilityProvider' => $request->input('utilityProvider')
         ];
 
