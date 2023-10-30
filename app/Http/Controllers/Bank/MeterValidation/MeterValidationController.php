@@ -88,7 +88,8 @@ class MeterValidationController extends Controller
             $message = 'Something went wrong on our end.';
         }
 
-        return redirect()->route('home')->with('success', $message);
+        return redirect()->to('meter/'.$request->input('meterNumber').'/request/9908009595');
+        // return redirect()->to('tokens', [$request->input('meterNumber')]);
     }
 
     public function getNotifications(Request $request)
@@ -107,5 +108,24 @@ class MeterValidationController extends Controller
         // }
         // $notifications = $notificationsResponse['notifications'] ?? [];
         return view('bank.notification', compact('notifications'));
+    }
+
+    public function getTokenByMeterNumberAndRequestId(Request $request, $meterNumber, $requestId)
+    {
+        echo "$meterNumber"."$requestId";
+        // $notificationsResponse = [];
+        // $notifications = [];
+        // try {
+        //     $notificationsResponse = Http::post('http://127.0.0.1:8000/api/token-receiver')['notifications'];
+        // } catch (\Exception $e) {
+        //     Log::error("Meter Validate Exception:" . $e->getMessage());
+        // }
+
+        // $notifications = json_decode(json_encode($notificationsResponse), true);
+        // // if(array_key_exists('notifications', $notificationsResponse)){
+
+        // // }
+        // // $notifications = $notificationsResponse['notifications'] ?? [];
+        // return view('bank.notification', compact('notifications'));
     }
 }
