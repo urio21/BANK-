@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Bank\MeterValidation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\Http;
 
 class MeterValidationController extends Controller
@@ -110,22 +111,26 @@ class MeterValidationController extends Controller
         return view('bank.notification', compact('notifications'));
     }
 
-    public function getTokenByMeterNumberAndRequestId(Request $request, $meterNumber, $requestId)
+    public function getTokenByMeterNumberAndRequestId($meterNumber, $requestId)
     {
-        echo "$meterNumber"."$requestId";
+       // echo "$meterNumber"."$requestId";
         // $notificationsResponse = [];
         // $notifications = [];
-        // try {
-        //     $notificationsResponse = Http::post('http://127.0.0.1:8000/api/token-receiver')['notifications'];
-        // } catch (\Exception $e) {
-        //     Log::error("Meter Validate Exception:" . $e->getMessage());
-        // }
+        $inputs = [
+            'meterNumber' => $meterNumber,
+            'requestId' => $requestId
+        ];
+        
+        try {
+            $notificationsResponse = Http::post('http://127.0.0.1:8000/api/notification',$inputs);
 
-        // $notifications = json_decode(json_encode($notificationsResponse), true);
-        // // if(array_key_exists('notifications', $notificationsResponse)){
+            $notification = json_decode($notificationsResponse->body(), true);
+        
+            return view('bank.updatedNotification', compact('notification'));
+        } catch (\Exception $e) {
+            Log::error("Token Fetching exception: " . $e->getMessage());
+        }
 
-        // // }
-        // // $notifications = $notificationsResponse['notifications'] ?? [];
-        // return view('bank.notification', compact('notifications'));
+       
     }
 }

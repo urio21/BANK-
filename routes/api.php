@@ -2,10 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\authorapi\v1\AuthorController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\UpdateTaskController;
 use App\Http\Controllers\Api\V1\CompleteTaskController;
+use App\Http\Controllers\authorapi\v1\AuthorController;
+use App\Http\Controllers\Bank\MeterValidation\MeterValidationController;
 
 /*
 |--------------------------------------------------------------------------
