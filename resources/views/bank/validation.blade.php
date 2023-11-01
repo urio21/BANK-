@@ -26,6 +26,11 @@
             <label for="amount" class="required-field">Utility Provider</label>
             <input type="text" class="form-control" id="utilityProvider" name="utilityProvider" value="{{$meterData["utility_provider_id"]}}" placeholder="Enter Utility Provider">
           </div>
+          <div class="form-group" hidden>
+            <label for="requestId" class="required-field">Request</label>
+            <input type="text" class="form-control" id="requestId" name="requestId" value="{{$meterData["requestId"]}}" placeholder="Enter Utility Provider">
+          </div>
+          
           <!-- Continue button -->
             <div class="row col-md-4 mb-4 align-items-center justify-items-center">
                
