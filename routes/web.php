@@ -27,5 +27,4 @@ Route::post('generate_token', [MeterValidationController::class, 'confirmGenerat
 Route::get('notifications', [MeterValidationController::class, 'getNotifications'])->name('notifications');
 
 Route::get('meter/{meterNumber}/request/{requestId}', [MeterValidationController::class, 'getTokenByMeterNumberAndRequestId'])->name('tokens');
-// meter/731476719855/request/9908009595
 
