@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Bank\MeterValidation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Http;
 
 class MeterValidationController extends Controller
 {
     /**
+     * Point That I must remember is that ,I have to implement model that will carry out data throughout the Token Purchase operation for the purpose And avoid using Form
+     * 
      * Display the specified resource.
      */
     public function index()
@@ -37,27 +39,29 @@ class MeterValidationController extends Controller
         ]);
 
         $inputs = [
-            'meter_num' => $request->input('meterNumber'),
-            'amount' => $request->input('amount'),
-            'utilityProvider' => $request->input('utilityProvider')
+            'meterNumber' => $request->input('meterNumber'),
+            'utilityProvider' => $request->input('utilityProvider'),
+            'requestId' => 244,
+            'partnerCode' => 'CRDB112',
+            'requestTime' => Date::now()->format('Y-m-d H:i:s')
         ];
 
         Log::channel('daily')->info('Inputs' . json_encode($inputs));
 
-        $errorMessage = null;
-
-        $meterData = null;
+       $errorMessage = null;
 
         try {
-            $meterInfo = Http::post('http://127.0.0.1:8000/api/meter', $inputs);
+            $meterInfo = Http::post('http://127.0.0.1:8000/api/meter', $inputs)['data'];
+            
 
-            $meterInfoArray = json_decode($meterInfo, true);
+                if (array_key_exists('errorMessage', $meterInfo)) {
+                    $errorMessage = $meterInfo['errorMessage'];
+                } else {
+                    $meterData = $meterInfo;
+                $meterData['amount'] = $request->input('amount');
+                }
 
-            if (array_key_exists('message', $meterInfoArray)) {
-                $errorMessage = $meterInfo['message'];
-            } else {
-                $meterData = $meterInfo['Meter Information'];
-            }
+
         } catch (\Exception $e) {
             Log::info("Meter Validate Exception:" . $e->getMessage());
             $errorMessage = 'Something went wrong on our end.';
@@ -71,11 +75,13 @@ class MeterValidationController extends Controller
 
     public function confirmGenerateToken(Request $request)
     {
-
         $inputs = [
             'meterNumber' => $request->input('meterNumber'),
             'amount' => $request->input('amount'),
-            'utilityProvider' => $request->input('utilityProvider')
+            'utilityProvider' => $request->input('utilityProvider'),
+            'requestId' => 244,
+            'partnerCode' => 'CRDB112',
+            'requestTime' => Date::now()->format('Y-m-d H:i:s')
         ];
 
         Log::channel('daily')->info('Confirm Genearte Token Inputs' . json_encode($inputs));
@@ -89,8 +95,8 @@ class MeterValidationController extends Controller
             $message = 'Something went wrong on our end.';
         }
 
-        return redirect()->to('meter/'.$request->input('meterNumber').'/request/9908009595');
-        // return redirect()->to('tokens', [$request->input('meterNumber')]);
+      ///  return redirect()->to('meter/'.$request->input('meterNumber').'/request/9908009595');
+         return redirect()->to('tokens', [$request->input('meterNumber')]);
     }
 
     public function getNotifications(Request $request)
@@ -120,17 +126,17 @@ class MeterValidationController extends Controller
             'meterNumber' => $meterNumber,
             'requestId' => $requestId
         ];
-        
+
         try {
             $notificationsResponse = Http::post('http://127.0.0.1:8000/api/notification',$inputs);
 
             $notification = json_decode($notificationsResponse->body(), true);
-        
+
             return view('bank.updatedNotification', compact('notification'));
         } catch (\Exception $e) {
             Log::error("Token Fetching exception: " . $e->getMessage());
         }
 
-       
+
     }
 }

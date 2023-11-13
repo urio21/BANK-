@@ -10,12 +10,12 @@
           <h2>Meter Data</h2>
           <p class="fw-bold fs-6">Customer Name: {{$meterData["customerName"]}}</p>
           <p>Phone Number: {{$meterData["customerPhone"]}}</p>
-          <p>Meter Number: {{$meterData["meternumber"]}}</p>
-          <p>utility Provider: {{$meterData["utility_provider"]}}</p>
+          <p>Meter Number: {{$meterData["meterNumber"]}}</p>
+          <p>utility Provider: {{$meterData["utilityProvider"]}}</p>
           <p>Amount: {{$meterData["amount"]}}</p>
           <div class="form-group" hidden>
             <label for="meterNumber" class="required-field">Meter Number</label>
-            <input type="text" class="form-control" id="meterNumber" name="meterNumber" value="{{$meterData["meternumber"]}}" placeholder="Enter meter number" required>
+            <input type="text" class="form-control" id="meterNumber" name="meterNumber" value="{{$meterData["meterNumber"]}}" placeholder="Enter meter number" required>
             <span class="required-text">required</span>
           </div>
           <div class="form-group" hidden>
@@ -24,7 +24,7 @@
           </div>
           <div class="form-group" hidden>
             <label for="amount" class="required-field">Utility Provider</label>
-            <input type="text" class="form-control" id="utilityProvider" name="utilityProvider" value="{{$meterData["utility_provider_id"]}}" placeholder="Enter Utility Provider">
+            <input type="text" class="form-control" id="utilityProvider" name="utilityProvider" value="{{$meterData["utilityProvider"]}}" placeholder="Enter Utility Provider">
           </div>
           <div class="form-group" hidden>
             <label for="requestId" class="required-field">Request</label>
