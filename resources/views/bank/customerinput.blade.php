@@ -2,9 +2,27 @@
 @extends('bank.layouts.app')
 
 @section('content')
-
+@if ($message)
+    @if ($message=="Failed Try Again later")
+    <div class="container pt-4">
+        <div class="d-flex flex-row-reverse">
+            <div class="alert alert-danger alert-dismissible col-sm-3" >
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>{{ $message }}!</strong>
+              </div>
+            </div>
+    @else
+    <div class="container pt-4">
+        <div class="d-flex flex-row-reverse">
+            <div class="alert alert-success alert-dismissible col-sm-3" >
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>{{ $message }}!</strong>
+              </div>
+            </div>
+    @endif
+@endif
   <div class="custom-container">
-    <form action="{{ route('meter_validation') }}" method="post" class="custom-form">
+    <form action="{{ route('meter_validation') }}" method="post" class="custom-form" id="submitForm">
       @csrf
       <div>
         Fill in the following details to buy a token.
@@ -36,6 +54,31 @@
       <button type="submit" class="btn btn-primary btn-block" id="sendButton">Send</button>
     </form>
   </div>
+</div>
+
+
+      <div class="loading-overlay" style="display: none" id="spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+
+<!-- JavaScript that Allow spinning during Request Processing -->
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const submitForm = document.getElementById("submitForm");
+          const sendButton = document.getElementById("sendButton");
+          const spinner = document.getElementById("spinner");
+
+          submitForm.addEventListener("submit", function () {
+            // Show spinner when form is submitted
+            spinner.style.display = "flex";
+
+            // You can also disable the submit button to prevent multiple submissions
+            sendButton.setAttribute("disabled", "disabled");
+          });
+        });
+      </script>
 
   <!-- JavaScript to show "required" text on Send button click -->
   <script>
