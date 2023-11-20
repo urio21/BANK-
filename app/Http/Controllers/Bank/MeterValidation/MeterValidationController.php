@@ -67,7 +67,7 @@ class MeterValidationController extends Controller
             $errorMessage = 'Something went wrong on our end.';
         }
 
-        $inputs['amount'] = $request->input('amount');
+        $inputs = array_merge($inputs, ['amount' => $request->input('amount')]);
         session(['user_data' => $inputs]);
 
         if (isset($errorMessage)) {
@@ -81,12 +81,12 @@ class MeterValidationController extends Controller
     {
         $data = session('user_data');
         $inputs = [
-            'meterNumber' => $data['meterNumber'],
-            'amount' => $data['amount'],
             'utilityProvider' => $data['utilityProvider'],
-            'requestId' => $data['requestId'],
+            'amount' => $data['amount'],
+            'meterNumber' => $data['meterNumber'],
+            'requestTime' => $data['requestTime'],
             'partnerCode' => $data['partnerCode'],
-            'requestTime' => Date::now()->format('Y-m-d H:i:s')
+            'requestId' => $data['requestId']
         ];
 
         Log::channel('daily')->info('Confirm Generate Token Inputs' . json_encode($inputs));
@@ -95,11 +95,11 @@ class MeterValidationController extends Controller
 
         try {
             $message1 = Http::post('http://127.0.0.1:8000/api/token-generator', $inputs);
-            if($message1){
+            if($message1->status() === 200 ){
                 $message = $message1['message'];
             }
             else{
-                $message = "api failed";
+                $message = $message1->status();
             }
         } catch (\Exception $e) {
             Log::info("Meter Validate Exception:" . $e->getMessage());
